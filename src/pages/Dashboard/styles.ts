@@ -6,17 +6,17 @@ interface FormProps {
 }
 
 export const Title = styled.h1`
-    font-size: 48px;
-    color: #3a3a3a;
+    font-size: 32px;
+    color: #173B66;
     max-width: 450px;
     line-height: 56px;
 
-    margin-top: 80px;
+    margin-top: 40px;
 `;
 
  export const Form = styled.form<FormProps>`
     margin-top: 40px;
-    max-width: 714px;
+    max-width: 960px;
     display: flex;
 
     input{
@@ -25,14 +25,13 @@ export const Title = styled.h1`
         padding: 0 24px;
         border: 0;
         border-radius: 5px 0 0 5px;
-        color: #3a3a3a;
+        color: #a8a8b3;
         border: 2px solid #FFF;
         border-right: 0;
 
-        ${(props) => props.hasError && css`
-            border-color: #c53030;
+        ${(props) => props.hasError && `
+        border-color: #c53030;
         `}
-
         &::placeholder {
             color: #a8a8b3;
         }
@@ -41,7 +40,7 @@ export const Title = styled.h1`
     button{
         width: 210px;
         height: 70px;
-        background: #04D361;
+        background: #143b67;
         border-radius: 0px 5px 5px 0px;
         border: 0;
         color: #FFF;
@@ -49,7 +48,7 @@ export const Title = styled.h1`
         transition: background-color 0.2s;
 
         &:hover{
-            background: ${shade(0.2, '#04D361')};
+            background: ${shade(0.2, '#143b67')};
         }
     }
 `;
@@ -59,59 +58,202 @@ export const Error =styled.span`
     color: #c53030;
     margin-top: 8px;
 `;
+export const Info = styled.section`
+    display:block;
+    margin-top: 40px;
+    
 
- export const Repositories = styled.div`
-    margin-top: 80px;
-    max-width: 700px;
-
-   
-
-    a {
+    a{  
+        max-width: 960px;
         background: #FFF;
         border-radius: 5px;
         width: 100%;
         padding: 24px;
         display: block;
         text-decoration: none;
-        transition: transform 0.2s;
-
-        display: flex;
-        align-items: center;
+        cursor: default;
 
         & + a {
-            margin-top: 16px;
+            margin-top: 40px;
+            
         }
 
-        &:hover {
-        transform: translateX(10px);
-        }
-
-        img {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%
-        }
-
-        div {
-            margin: 0 16px;
-            flex: 1;
-
-            strong{
-                font-size: 20px;
-                color: #3D3D4D;
-            }
         p {
             font-size: 18px;
-            color: #A8A8B3;
+            color: #6c6c80;
             margin-top: 4px;
         }
         }
-    svg{
-        margin-left: auto;
-        color: #C9C9D4;
+        ul{
+            display:flex;
+            list-style: none;
+
+            & + ul{
+                margin-top: 20px;
+            }
+            
+    
+            li{
+    
+                & + li {
+                    margin-left: 80px;
+                }
+    
+                strong{
+                    display: block;
+                    font-size: 22px;
+                    color: #3d3d4d;
+                }
+            }
+            button{
+
+                width: 360px;
+                height: 70px;
+                background: #143b67;
+                border-radius: 5px;
+                border: 0;
+                color: #FFF;
+                font-weight: bold;
+                font-size: 28px;
+                transition: background-color 0.2s;
+            
+            
+            
+                &:hover{
+                    background: ${shade(0.2, '#143b67')};
+                }
     }
+
+
+`;
+ export const InfoTurma = styled.div`
+    max-width: 1280px;
+    
+
+        background: #FFF;
+        border-radius: 5px;
+        width: 100%;
+        padding: 24px;
+        display: block;
+        text-decoration: none;
+
+        display: flex;
+        
+        & + div {
+            margin-left: 40px;
+        }
+
+        p {
+            font-size: 18px;
+            color: #6c6c80;
+            margin-top: 4px;
+        }
+        }
+        ul{
+            display:flex;
+            list-style: none;
+
+            & + ul{
+                margin-top: 20px;
+            }
+            
+    
+            li{
+    
+                & + li {
+                    margin-left: 80px;
+                }
+    
+                strong{
+                    display: block;
+                    font-size: 22px;
+                    color: #3d3d4d;
+                }
+            }
+            button{
+
+                width: 360px;
+                height: 70px;
+                background: #143b67;
+                border-radius: 5px;
+                border: 0;
+                color: #FFF;
+                font-weight: bold;
+                font-size: 28px;
+                transition: background-color 0.2s;
+            
+            
+            
+                &:hover{
+                    background: ${shade(0.2, '#143b67')};
+                }
+        }
+
+    
+    
+ `;
+
+ 
+ export const InfoAluno = styled.div`
+    margin-left: 40px;
+    max-width: 410px;
+    display: flex;
+
+    background: #FFF;
+    border-radius: 5px;
+    width: 100%;
+    padding: 24px;
+    display: block;
+    text-decoration: none;
+    transition: transform 0.2s;
+
+    align-items: center;
+
+        div {
+      
+            strong{
+                font-size: 22px;
+                color: #3D3D4D;
+            }
+
+        ul{
+            display:flex;
+            list-style: none;
+
+            & + ul{
+                margin-top: 20px;
+            }
+            
+    
+            li{
+        
+                span {
+                    display: block;
+                    margin-top: 4px;
+                    color: #6c6c80;
+                    font-size: 18px;
+                }
+                button{
+
+                    width: 360px;
+                    height: 70px;
+                    background: #143b67;
+                    border-radius: 5px;
+                    border: 0;
+                    color: #FFF;
+                    font-weight: bold;
+                    font-size: 28px;
+                    transition: background-color 0.2s;
+                
+                
+                
+                    &:hover{
+                        background: ${shade(0.2, '#143b67')};
+                    }
+                    }
+            }
+        }
 
     
     }
  `;
-

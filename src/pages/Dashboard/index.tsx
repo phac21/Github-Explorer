@@ -1,104 +1,134 @@
 import React, { useState, useEffect, FormEvent } from 'react';
-import { Link } from 'react-router-dom';
-import {FiChevronRight} from 'react-icons/fi'
 
 import logoImg from '../../assets/logo.svg';
-import { Title, Form, Repositories, Error } from './styles';
+import { Title, Form, Info, Error } from './styles';
 
 //API
 import api from '../../services/api';
 
-interface Repository {
-  full_name: string;
-  description: string;
-  owner: {
-    login: string;
-    avatar_url: string;
-  }
+interface  Alunos{
+  ID: string;
+  RA: string;
+  Nome: string;
+  Turma: string;
+  PERIODO: string;
+  Unidade: string;
+  Sala: string;
+  Professor: string;
+  DIAS_DA_SEMANA: string;
+  Data_Inicio: string;
+  Data_Fim: string;
+  Sigla: string;
+  Livro: string;
+};
 
-}
 
 const Dashboard: React.FC =  () => {
-  const [newRepo, setNewRepo] = useState('');
-  const [repositories, setRepositories] = useState<Repository[]> (() =>{
-    const storagedRepositories = localStorage.getItem('@GithubExplorer:repositories');
+  //estado da pesquisa
+  const [novoAluno, setNovoAluno] = useState('');
+  //estado de erro da pesquisa
+  const [inputError, setInputError] = useState('');
+  //Estado de alunos
+  const [alunos, setAlunos] = useState <Alunos[]>(() => {
+    const storagedAlunos = localStorage.getItem('@ctjWelcome:alunos');
 
-    if (storagedRepositories) {
-      return JSON.parse(storagedRepositories);
-    }else {
+    if (storagedAlunos) {
+      return JSON.parse(storagedAlunos);
+    }else{
       return [];
     }
-
   });
 
-  const [inputError, setInputError] = useState(''); 
+  useEffect(() => {
+    localStorage.setItem('@ctjWelcome:alunos', JSON.stringify(alunos));
+  }, [alunos]);
 
-  useEffect(() => { 
-    localStorage.setItem('@GithubExplorer:repositories', JSON.stringify(repositories));
-  }, [repositories])
-
-  async function handleAddRepository (event: FormEvent<HTMLFormElement>): Promise<void> {
-    event.preventDefault();
-
-    if (!newRepo) {
-      setInputError('Digite o autor/nome do repositório')
+ 
+  async function adicionarAluno(event: FormEvent<HTMLFormElement>): Promise<void> {
+    //evita o recarregamento da página ao clicar no botão de pesquisa.
+    event.preventDefault(); 
+    //verificando se o valor enviado pelo form não é vazio.
+    if (!novoAluno) {
+      setInputError('Digite um RA ou nome válido');
       return;
     }
-
     try{
-      const response = await api.get<Repository>(`repos/${newRepo}`)
+      //adicionar o aluno
+      //consumir api de consulta SQL
+      //salvar o novo aluno no estado
+      const response = await api.get(`/framework/v1/consultaSQLServer/RealizaConsulta/WS.00001/1/S/?parameters=TEXTO_S=${novoAluno}`);
     
-      const repository = response.data;
-  
-      setRepositories([...repositories, repository]);
-      setNewRepo('');
+      const aluno = (response.data);
+
+      // setAlunos([...alunos, aluno]);
+      setAlunos(aluno);
+      // console.log(alunos);
+
+      
+      setNovoAluno('');
       setInputError('');
+ 
     }catch (err) {
-      setInputError('Erro na busca do repositório')
-    };
-
-
-    // adição de um novo repositório
-    // consumir api do github
-    // salvar novo repositório no estado
+      setInputError('Erro na busca por este aluno!')
+    }    
   }
-
+  
   return (
     <>
-        <img src={logoImg} alt="Github Explorer"/>       
-        <Title>Explore repositórios no Github</Title>
+        <img src={logoImg} width="550" alt="Casa Thomas Jefferson"/>       
+        <Title>Welcome!</Title>
 
-        <Form hasError={Boolean(!!inputError)} onSubmit={handleAddRepository}>
-           <input 
-           value={newRepo}
-           onChange={ (e) => setNewRepo(e.target.value)}
-            placeholder="Digite aqui"
-            />
-           <button type='submit'>Pesquisar</button>
+        <Form hasError={!!inputError} onSubmit={adicionarAluno}>
+          <input value={novoAluno} 
+          onChange={e => setNovoAluno(e.target.value)}
+          placeholder="Digite o RA ou nome do aluno"/>
+          <button type="submit">Pesquisar</button>
         </Form>
 
-        {inputError && <Error>{inputError}</Error>}
+        { inputError && <Error>{inputError}</Error>}
 
-        <Repositories>
-        {repositories.map(repository => (
-          <Link key={repository.full_name} to={`/repositories/${repository.full_name}`}>
-            <img 
-              src={repository.owner.avatar_url}
-              alt={repository.owner.login}
-            />
-            <div>
-              <strong>{repository.full_name}</strong>
-              <p>{repository.description}</p>
-            </div>
-            <FiChevronRight size={20}/>
-          </Link>           
-        ) )}
-
-
-  
-        </Repositories>
-    </>
+        <Info>
+          {alunos.map(aluno => (
+            <a key={aluno.ID} href="/">
+            <ul>
+              <li>
+                <strong>{aluno.Nome}</strong>
+                <p>Nome</p>
+              </li>
+            </ul>
+            <ul> 
+              <li>
+                <strong>{aluno.PERIODO}</strong>
+                <p>Disciplina</p>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <strong>{aluno.Data_Inicio}</strong>
+                <p>Data de Início</p>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <strong>{aluno.Unidade}</strong>
+                <p>Campus</p>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <strong>{aluno.Livro}</strong>
+                <p>Livro</p>
+              </li>
+            </ul> 
+          </a>
+          ))}
+          
+        </Info>
+       </> 
+    
   )
 };
 
 export default Dashboard;
+
+ 
